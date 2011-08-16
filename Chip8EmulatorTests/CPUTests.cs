@@ -92,6 +92,8 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x202, cpu.InstructionPointer);
         }
 
+
+
         [TestMethod]
         public void CanHandleSkipEqualRegisterWhenMatch()
         {
@@ -110,6 +112,14 @@ namespace Chip8EmulatorTests
             cpu.Register[0x2] = 0xee;
             cpu.ProcessInstruction(0x5120);
             Assert.AreEqual(0x200, cpu.InstructionPointer);
+        }
+
+        [TestMethod]
+        public void CanHandleLDV()
+        {
+            var cpu = SetupMachine();
+            cpu.ProcessInstruction(0x6477);
+            Assert.AreEqual(0x77, cpu.Register[4]);
         }
         private CPU SetupMachine()
         {
