@@ -17,7 +17,7 @@ namespace Chip8Emulator
             this.memory = memory;
 
             
-            InstructionDictionary[0x0] = CLSRET;
+            InstructionDictionary[0x0] = SYS;
             InstructionDictionary[0x1] = JP;
             InstructionDictionary[0x2] = CALL;
             InstructionDictionary[0x3] = SE;
@@ -48,7 +48,7 @@ namespace Chip8Emulator
             return func(instruction);
         }
 
-        private bool CLSRET(ushort instruction)
+        private bool SYS(ushort instruction)
         {
             if (GetAddress(instruction) == 0xee)
             {
