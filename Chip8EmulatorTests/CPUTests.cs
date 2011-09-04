@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Chip8Emulator;
@@ -115,12 +116,140 @@ namespace Chip8EmulatorTests
         }
 
         [TestMethod]
-        public void CanHandleLDV()
+        public void CanHandleLDVByte()
         {
             var cpu = SetupMachine();
             cpu.ProcessInstruction(0x6477);
             Assert.AreEqual(0x77, cpu.Register[4]);
         }
+
+        [TestMethod]
+        public void CanHandleADDVByte()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[1] = 0x10;
+            cpu.ProcessInstruction(0x7110);
+            Assert.AreEqual(0x20, cpu.Register[1]);
+        }
+
+        [TestMethod]
+        public void CanHandleLDxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[4] = 0x99;
+            cpu.ProcessInstruction(0x8040);
+            
+            Assert.AreEqual(0x99, cpu.Register[0]);
+        }
+
+        [TestMethod]
+        public void CanHandleORxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[4] = 0x0f;
+            cpu.Register[3] = 0xf0;
+
+            cpu.ProcessInstruction(0x8341);
+
+            Assert.AreEqual(0xff, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleANDxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[4] = 0xf0;
+            cpu.Register[3] = 0xf1;
+
+            cpu.ProcessInstruction(0x8342);
+
+            Assert.AreEqual(0xf0, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleXORxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0x4;
+            cpu.Register[4] = 0x3;
+
+            cpu.ProcessInstruction(0x8343);
+
+            Assert.AreEqual(0x7, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleADDxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xf;
+            cpu.Register[4] = 0xf0;
+            cpu.ProcessInstruction(0x8344);
+
+            Assert.AreEqual(0xff, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleSUBxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xf0;
+            cpu.Register[4] = 0xa0;
+
+            cpu.ProcessInstruction(0x8345);
+
+            Assert.AreEqual(0x50, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleSUBxyWithBorrow()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xf0;
+            cpu.Register[4] = 0xff;
+
+            cpu.ProcessInstruction(0x8345);
+
+            Assert.AreEqual(0x1, cpu.Register[15]);
+        }
+
+        [TestMethod]
+        public void CanHandleSHRxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xff;
+            cpu.ProcessInstruction(0x8306);
+
+            Assert.AreEqual(0x7f,  cpu.Register[3]);
+            Assert.AreEqual(0x1, cpu.Register[0xf]);
+            
+        }
+
+        [TestMethod]
+        public void CanHandleSUBNxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xff;
+            cpu.Register[4] = 0xf0;
+
+            cpu.ProcessInstruction(0x8347);
+
+            Assert.AreEqual(0x1, cpu.Register[15]);
+            Assert.AreEqual(0xf1, cpu.Register[3]);
+        }
+
+        [TestMethod]
+        public void CanHandleSHLxy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[3] = 0xff;
+            cpu.ProcessInstruction(0x830e);
+
+            Assert.AreEqual(0xfe, cpu.Register[3]);
+            Assert.AreEqual(0x1, cpu.Register[0xf]);
+
+        }
+
         private CPU SetupMachine()
         {
             Memory memory = new Memory();
