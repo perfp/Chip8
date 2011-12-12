@@ -250,6 +250,23 @@ namespace Chip8EmulatorTests
 
         }
 
+        [TestMethod]
+        public void CanHandleSNExy()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[1] = 0x0;
+            cpu.Register[2] = 0x0;
+
+            cpu.ProcessInstruction(0x9120);
+            Assert.AreEqual(0x200, cpu.InstructionPointer);
+
+            cpu.Register[2] = 0x1;
+            cpu.ProcessInstruction(0x9120);
+            Assert.AreEqual(0x202, cpu.InstructionPointer);
+        }
+
+       
+
         private CPU SetupMachine()
         {
             Memory memory = new Memory();

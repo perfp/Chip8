@@ -27,7 +27,9 @@ namespace Chip8Emulator
             InstructionSet[0x6] = LD;
             InstructionSet[0x7] = ADD;
             InstructionSet[0x8] = REG;
+            InstructionSet[0x9] = SNER;
             InstructionSet[0xA] = LDI;
+
 
             RegisterCommands[0x0] = (x, y) => Register[x] = Register[y];
             RegisterCommands[0x1] = (x, y) => Register[x] |= Register[y];
@@ -179,6 +181,20 @@ namespace Chip8Emulator
 
             command(regX, regY);
             return false; 
+        }
+
+        private bool SNER(ushort instruction)
+        {
+            var regX = GetX(instruction);
+            var regY = GetY(instruction);
+
+            var regValueX = Register[regX];
+            var regValueY = Register[regY];
+
+            if (regValueX != regValueY)
+                InstructionPointer += 2;
+
+            return true;
         }
 
 
