@@ -265,7 +265,16 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x202, cpu.InstructionPointer);
         }
 
-       
+
+        [TestMethod]
+        public void CanHandleJPOffset()
+        {
+            var cpu = SetupMachine();
+            cpu.Register[0] = 0x30;
+            cpu.ProcessInstruction(0xb300);
+
+            Assert.AreEqual(0x330, cpu.InstructionPointer);
+        }
 
         private CPU SetupMachine()
         {

@@ -27,8 +27,9 @@ namespace Chip8Emulator
             InstructionSet[0x6] = LD;
             InstructionSet[0x7] = ADD;
             InstructionSet[0x8] = REG;
-            InstructionSet[0x9] = SNER;
+            InstructionSet[0x9] = SNEV;
             InstructionSet[0xA] = LDI;
+            InstructionSet[0xB] = JPV;
 
 
             RegisterCommands[0x0] = (x, y) => Register[x] = Register[y];
@@ -183,7 +184,7 @@ namespace Chip8Emulator
             return false; 
         }
 
-        private bool SNER(ushort instruction)
+        private bool SNEV(ushort instruction)
         {
             var regX = GetX(instruction);
             var regY = GetY(instruction);
@@ -197,6 +198,15 @@ namespace Chip8Emulator
             return true;
         }
 
+
+        private bool JPV(ushort instruction)
+        {
+            var offset = Register[0];
+            var address = GetAddress(instruction);
+
+            var a = (ushort)offset + address;
+
+        }
 
         private byte GetY(ushort instruction)
         {
