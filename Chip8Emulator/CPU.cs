@@ -6,6 +6,9 @@ namespace Chip8Emulator
     public class CPU
     {
         private Memory memory;
+		private Display display;
+		private Keyboard keyboard;
+
         public ushort InstructionPointer = 0x200;
         public ushort AddressRegister;
         public byte[] Register = new byte[16];
@@ -13,10 +16,15 @@ namespace Chip8Emulator
 
         private Dictionary<byte, Func<ushort, bool>> InstructionSet = new Dictionary<byte, Func<ushort, bool>>();
         private Dictionary<byte, Action<byte, byte>> RegisterCommands = new Dictionary<byte, Action<byte, byte>>();
-        public CPU(Memory memory)
+
+		public Func<byte> RandomFunc;
+
+		public CPU(Memory memory, Display display, Keyboard keyboard)
         {
             this.memory = memory;
-
+			this.display = display;
+			this.keyboard = keyboard;
+			this.RandomFunc = this.RandomGenerator;
             
             InstructionSet[0x0] = SYS;
             InstructionSet[0x1] = JP;
@@ -30,8 +38,12 @@ namespace Chip8Emulator
             InstructionSet[0x9] = SNEV;
             InstructionSet[0xA] = LDI;
             InstructionSet[0xB] = JPV;
+			InstructionSet[0xC] = RND;
+			InstructionSet[0xD] = DRW;
+			InstructionSet[0xE] = SKP;
 
 
+			// used with REG
             RegisterCommands[0x0] = (x, y) => Register[x] = Register[y];
             RegisterCommands[0x1] = (x, y) => Register[x] |= Register[y];
             RegisterCommands[0x2] = (x, y) => Register[x] &= Register[y];
@@ -52,7 +64,7 @@ namespace Chip8Emulator
                 Register[0xf] = (byte)(Register[x] > Register[y] ? 1 : 0);
                 Register[x] = (byte) (Register[y] - Register[x]);
             };
-            RegisterCommands[0xe] = (x, y) =>
+			RegisterCommands[0xe] = (x, y) =>
             {
                 Register[0xf] = (byte)(Register[x] >> 7);
                 Register[x] = (byte)(Register[x] << 1);
@@ -160,8 +172,9 @@ namespace Chip8Emulator
 
         private bool JP(ushort instruction)
         {
-            InstructionPointer = GetAddress(instruction);
-            return false;
+			InstructionPointer = GetAddress(instruction);
+			return false;
+
         }
 
         private bool ADD(ushort instruction)
@@ -201,12 +214,60 @@ namespace Chip8Emulator
 
         private bool JPV(ushort instruction)
         {
-            var offset = Register[0];
-            var address = GetAddress(instruction);
+			byte offset = Register[0];
+            ushort address = GetAddress(instruction);
 
-            var a = (ushort)offset + address;
-
+			ushort ipaddress = (ushort)(offset + address);
+			InstructionPointer = ipaddress;
+			return true;
         }
+
+		private bool RND(ushort instruction){
+			byte randomValue = RandomFunc();
+			var register = GetX(instruction);
+			var mask = GetValue(instruction);
+
+			Register[register] = (byte)(randomValue & mask);
+			return false;
+		}
+
+		private bool DRW(ushort instruction){
+			var Vx = GetX(instruction);
+			var Vy = GetY(instruction);
+			var x = Register[Vx];
+			var y = Register[Vy];
+			var count = GetSubCommand(instruction);
+
+			byte[] sprite = new byte[count];
+			for (int i=0;i<count;i++){
+				sprite[i] = memory.GetValue(AddressRegister);
+			}
+			SetSprite(x, y, sprite, count);
+			return false;
+		}
+
+		private bool SKP(ushort instruction){
+			var value = GetValue(instruction);
+			var x = GetX(instruction);
+			var key = Register[x];
+
+			switch (value) {
+				case 0x9e:
+					if(keyboard.GetValue() == key) {
+						InstructionPointer += 2;
+					}
+					break;
+				case 0xa1:
+					if(keyboard.GetValue() != key) {
+						InstructionPointer += 2;
+					}
+					break;
+				default:
+					throw new InvalidOperationException();
+			}
+			return false;
+		}
+
 
         private byte GetY(ushort instruction)
         {
@@ -245,5 +306,30 @@ namespace Chip8Emulator
             byte operation_lo = memory.GetValue(InstructionPointer++);
             return (ushort) (((operation_hi << 8)) | operation_lo);
         }
+
+		private byte RandomGenerator(){
+			return (byte)new Random().Next(256);
+		}
+
+		public void SetSprite(int x, int y, byte[] sprite, int len){
+
+			var bytePos = x / 8;
+			var bitPos = x % 8;
+
+			for (int spriteRow=0;spriteRow<len;spriteRow++){
+				var row = y + spriteRow;
+
+				if(row > 31)
+					row -= 32;
+
+				if(bitPos > 0) {
+					display.Screen[row * 8 + bytePos] = (byte)(sprite[spriteRow] >> bitPos);
+					var byteToSet = (bytePos + 1 < 8) ? (bytePos + 1) : 0; 
+					display.Screen[row * 8 + byteToSet] = (byte)(sprite[spriteRow] << (8 - bitPos));
+				} else {
+					display.Screen[row * 8 + bytePos] = sprite[spriteRow];
+				}
+			}
+		}
     }
 }

@@ -3,3 +3,4 @@
 /Users/perfp/Documents/cs/Chip8/Chip8Emulator/bin/Debug/Chip8Emulator.dll
 /Users/perfp/Documents/cs/Chip8/Chip8Emulator/obj/Debug/Chip8Emulator.dll
 /Users/perfp/Documents/cs/Chip8/Chip8Emulator/obj/Debug/Chip8Emulator.dll.mdb
+/Users/perfp/Documents/cs/Chip8/Chip8Emulator/bin/Debug/nunit.framework.dll

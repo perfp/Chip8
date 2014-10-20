@@ -1,27 +1,27 @@
 ﻿using Chip8Emulator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Chip8EmulatorTests
 {
     
-    [TestClass]
+    [TestFixture]
     public class MemoryTests
     {
-        [TestMethod]
+        [Test]
         public void Has4KOfRAM()
         {
             Memory memory = new Memory();
             Assert.AreEqual(memory.Length, 4096);
         }
 
-        [TestMethod]
+        [Test]
         public void CanSetValueAtLocation()
         {
             Memory memory = new Memory();
             memory.SetValue(0x200, 0xff);
         }
 
-        [TestMethod]
+        [Test]
         public void CanGetValueAtLocation()
         {
             Memory memory = new Memory();
@@ -30,7 +30,7 @@ namespace Chip8EmulatorTests
             
         }
 
-        [TestMethod]
+        [Test]
         public void CanLoadProgram()
         {
             Memory memory = new Memory();

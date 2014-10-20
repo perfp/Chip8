@@ -4,24 +4,28 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Chip8Emulator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Chip8EmulatorTests
 {
-    [TestClass]
+    [TestFixture]
     public class CPUTests
     {
-        [TestMethod]
+		Display display;
+		Keyboard keyboard;
+		Memory memory;
+
+        [Test]
         public void CanRunSmallesPossibleProgram()
         {
             Memory memory = new Memory();
             memory.SetValue(0x200, 0x00);
             memory.SetValue(0x201, 0xee);
-            CPU cpu = new CPU(memory);
+            CPU cpu = new CPU(memory, null, null);
             cpu.Run();
         }
 
-        [TestMethod]
+        [Test]
         public void CanSetAddressRegister()
         {
             CPU cpu = SetupMachine();
@@ -30,7 +34,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x4ff, cpu.AddressRegister);
         }
 
-        [TestMethod]
+        [Test]
         public  void CanHandleJP()
         {
             var cpu = SetupMachine();
@@ -38,7 +42,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x234, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleCALL()
         {
             var cpu = SetupMachine();
@@ -48,7 +52,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x345, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleRET()
         {
             var cpu = SetupMachine();
@@ -57,7 +61,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(false, quit);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipEqualValueWhenMatch()
         {
             var cpu = SetupMachine();
@@ -66,7 +70,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x202, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipEqualValueWhenNoMatch()
         {
             var cpu = SetupMachine();
@@ -75,7 +79,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x200, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipNotEqualValueWhenMatch()
         {
             var cpu = SetupMachine();
@@ -84,7 +88,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x200, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipNotEqualValueWhenNoMatch()
         {
             var cpu = SetupMachine();
@@ -95,7 +99,7 @@ namespace Chip8EmulatorTests
 
 
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipEqualRegisterWhenMatch()
         {
             var cpu = SetupMachine();
@@ -105,7 +109,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x202, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSkipEqualRegisterWhenNoMatch()
         {
             var cpu = SetupMachine();
@@ -115,7 +119,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x200, cpu.InstructionPointer);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleLDVByte()
         {
             var cpu = SetupMachine();
@@ -123,7 +127,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x77, cpu.Register[4]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleADDVByte()
         {
             var cpu = SetupMachine();
@@ -132,7 +136,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x20, cpu.Register[1]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleLDxy()
         {
             var cpu = SetupMachine();
@@ -142,7 +146,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x99, cpu.Register[0]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleORxy()
         {
             var cpu = SetupMachine();
@@ -154,7 +158,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0xff, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleANDxy()
         {
             var cpu = SetupMachine();
@@ -166,7 +170,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0xf0, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleXORxy()
         {
             var cpu = SetupMachine();
@@ -178,7 +182,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x7, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleADDxy()
         {
             var cpu = SetupMachine();
@@ -189,7 +193,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0xff, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSUBxy()
         {
             var cpu = SetupMachine();
@@ -201,7 +205,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x50, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSUBxyWithBorrow()
         {
             var cpu = SetupMachine();
@@ -213,7 +217,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x1, cpu.Register[15]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSHRxy()
         {
             var cpu = SetupMachine();
@@ -225,7 +229,7 @@ namespace Chip8EmulatorTests
             
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSUBNxy()
         {
             var cpu = SetupMachine();
@@ -238,7 +242,7 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0xf1, cpu.Register[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSHLxy()
         {
             var cpu = SetupMachine();
@@ -250,7 +254,7 @@ namespace Chip8EmulatorTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void CanHandleSNExy()
         {
             var cpu = SetupMachine();
@@ -266,7 +270,7 @@ namespace Chip8EmulatorTests
         }
 
 
-        [TestMethod]
+        [Test]
         public void CanHandleJPOffset()
         {
             var cpu = SetupMachine();
@@ -276,10 +280,70 @@ namespace Chip8EmulatorTests
             Assert.AreEqual(0x330, cpu.InstructionPointer);
         }
 
+		[Test]
+		public void CanHandleRND(){
+
+			var cpu = SetupMachine();
+			cpu.ProcessInstruction(0xc3ff);
+			var randomValue = cpu.Register[3];
+
+			Assert.IsTrue(randomValue >= 0 && randomValue <= 0xff);
+		}
+
+		[Test]
+		public void CanHandleRNDWithMask(){
+
+			var cpu = SetupMachine();
+			cpu.RandomFunc = () => 0xff;
+
+			cpu.ProcessInstruction(0xc3a0);
+			var randomValue = cpu.Register[3];
+
+			Assert.AreEqual(0xa0, randomValue);
+		}
+
+		[Test]
+		public void CanHandleDRW(){
+
+			var cpu = SetupMachine();
+			memory.SetValue(0x300, 0xff);
+			cpu.Register[0] = 1;
+			cpu.Register[1] = 1;
+			cpu.AddressRegister = 0x300;
+			cpu.ProcessInstruction(0xd011);
+			Assert.AreEqual(0x7f, display.Screen[8]);
+			Assert.AreEqual(0x80, display.Screen[9]);
+
+		}
+
+		[Test]
+		public void CanHandleSKP(){
+			var cpu = SetupMachine();
+			cpu.Register[0] = 0xa;
+			keyboard.SetValue(0xa);
+			cpu.InstructionPointer = 0x200;
+			cpu.ProcessInstruction(0xe09e);
+
+			Assert.AreEqual(0x202, cpu.InstructionPointer);
+		}
+
+		[Test]
+		public void CanHandleSKNP(){
+			var cpu = SetupMachine();
+			cpu.Register[0] = 0xa;
+			keyboard.SetValue(0xb);
+			cpu.InstructionPointer = 0x200;
+			cpu.ProcessInstruction(0xe0a1);
+
+			Assert.AreEqual(0x202, cpu.InstructionPointer);
+		}
+
         private CPU SetupMachine()
         {
-            Memory memory = new Memory();
-            return new CPU(memory);
+			memory = new Memory();
+			display = new Display();
+			keyboard = new Keyboard();
+			return new CPU(memory, display, keyboard);
         }
     }
 }

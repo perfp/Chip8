@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator", "Chip8Emulator\Chip8Emulator.csproj", "{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8EmulatorTests", "Chip8EmulatorTests\Chip8EmulatorTests.csproj", "{5A17096A-93FD-4FEE-B5B8-23B519D04253}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8EmulatorTests", "Chip8EmulatorTests\Chip8EmulatorTests.csproj", "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38CED35D-5B80-4AC9-B545-B25F01A09ECB}"
+	ProjectSection(SolutionItems) = preProject
+		Cowgod%27s Chip-8 Technical Reference.html = Cowgod%27s Chip-8 Technical Reference.html
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +20,15 @@ Global
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A17096A-93FD-4FEE-B5B8-23B519D04253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A17096A-93FD-4FEE-B5B8-23B519D04253}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A17096A-93FD-4FEE-B5B8-23B519D04253}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A17096A-93FD-4FEE-B5B8-23B519D04253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Chip8Emulator\Chip8Emulator.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,3 +2,8 @@
 /Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/Chip8Emulator.dll
 /Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/Chip8Emulator.dll.mdb
 /Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/nunit.framework.dll
+/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/Newtonsoft.Json.dll
+/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/Chip8EmulatorTests.dll.mdb
+/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/bin/Debug/Chip8EmulatorTests.dll
+/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/obj/Debug/Chip8EmulatorTests.dll
+/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/obj/Debug/Chip8EmulatorTests.dll.mdb
