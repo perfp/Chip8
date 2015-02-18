@@ -30,6 +30,10 @@ namespace Chip8Emulator
           program.CopyTo(memoryBuffer, 0x200);
        }
 
+		public void InitializeROM(byte[] rom){
+			rom.CopyTo(memoryBuffer, 0x0);
+		}
+
 		public void InitializeInterpreterBuffer(){
 			// 0
 			memoryBuffer[0] = 0xF0;

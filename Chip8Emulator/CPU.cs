@@ -240,9 +240,13 @@ namespace Chip8Emulator
 
 			byte[] sprite = new byte[count];
 			for (int i=0;i<count;i++){
-				sprite[i] = memory.GetValue(AddressRegister);
+				sprite[i] = memory.GetValue(AddressRegister + i);
 			}
 			SetSprite(x, y, sprite, count);
+
+			// Redraw screen
+			display.Print();
+
 			return false;
 		}
 

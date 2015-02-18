@@ -12,7 +12,7 @@ namespace Chip8Emulator
 
 		public byte[] Screen {get;private set;}
 
-		public void Print(){	
+		public virtual void Print(){	
 			for (int y = 0; y < 32; y++) {
 				for (int x = 0; x < 8; x++) {
 					var word = Screen[y * 8 + x];
@@ -27,7 +27,7 @@ namespace Chip8Emulator
 							flag = 1 << i;
 
 						if((flag & word) > 0)
-							output = ".";
+							output = "*";
 
 						Console.Write(output);
 					}

@@ -1,0 +1,27 @@
+﻿<Properties GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Chip8Console/test.bin">
+    <Files>
+      <File FileName="Chip8EmulatorTests/CPUTests.cs" Line="1" Column="1" />
+      <File FileName="Chip8EmulatorTests/MemoryTests.cs" Line="1" Column="1" />
+      <File FileName="Chip8EmulatorTests/packages.config" Line="1" Column="1" />
+      <File FileName="Chip8Emulator/Display.cs" Line="1" Column="1" />
+      <File FileName="Chip8Emulator/CPU.cs" Line="1" Column="1" />
+      <File FileName="Chip8Emulator/Memory.cs" Line="1" Column="1" />
+      <File FileName="Chip8Emulator/Keyboard.cs" Line="1" Column="1" />
+      <File FileName="Chip8Console/Program.cs" Line="1" Column="1" />
+      <File FileName="Chip8Console/ConsoleDisplay.cs" Line="1" Column="1" />
+      <File FileName="Chip8EmulatorTests/DisplayTests.cs" Line="1" Column="1" />
+      <File FileName="Chip8Console/ROM.bin" Line="1" Column="1" />
+      <File FileName="Chip8Console/test.bin" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/DisplayTests.cs" line="20" column="1" />
+      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/CPUTests.cs" line="313" column="1" />
+      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8Console/Program.cs" line="27" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

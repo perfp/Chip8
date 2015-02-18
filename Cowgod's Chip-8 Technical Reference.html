@@ -1,0 +1,1199 @@
+<HTML>
+	<HEAD>
+		<TITLE>Cowgod's Chip-8 Technical Reference</TITLE>
+	</HEAD>
+	<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" ALINK="#00007F" VLINK="#7F7F7F">
+		<CENTER>
+		Cowgod's<BR>
+		<FONT SIZE=7><STRONG><TT>Chip-8</TT></STRONG></FONT><BR>
+		Technical Reference v1.0<BR>
+		</CENTER>
+		<BR>
+		<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="0.0">0.0</A> - Table of Contents&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<BR>
+		</U></EM></STRONG></FONT>
+		<BR>
+		<TT><FONT SIZE=3>
+		<STRONG><A HREF="#0.0">0.0</A> - Table of Contents</STRONG><BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#0.1">0.1</A> - Using This Document<BR>
+		<BR>
+		<STRONG><A HREF="#1.0">1.0</A> - About Chip-8</STRONG><BR>
+		<BR>
+		<STRONG><A HREF="#2.0">2.0</A> - Chip-8 Specifications</STRONG><BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2.1">2.1</A> - Memory<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#memmap">Diagram</A> - Memory Map<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2.2">2.2</A> - Registers<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2.3">2.3</A> - Keyboard<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#keyboard">Diagram</A> - Keyboard Layout<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2.4">2.4</A> - Display<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#dispcoords">Diagram</A> - Display Coordinates<BR>	
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#font">Listing</A> - The Chip-8 Hexadecimal Font<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2.5">2.5</A> - Timers & Sound<BR>	
+		<BR>
+		<STRONG><A HREF="#3.0">3.0</A> - Chip-8 Instructions</STRONG><BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#3.1">3.1</A> - Standard Chip-8 Instructions<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00E0">00E0</A> - CLS<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00EE">00EE</A> - RET<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#0nnn">0<EM>nnn</EM></A> - SYS <EM>addr</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#1nnn">1<EM>nnn</EM></A> - JP <EM>addr</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#2nnn">2<EM>nnn</EM></A> - CALL <EM>addr</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#3xkk">3<EM>xkk</EM></A> - SE V<EM>x</EM>, <EM>byte</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#4xkk">4<EM>xkk</EM></A> - SNE V<EM>x</EM>, <EM>byte</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#5xy0">5<EM>xy</EM>0</A> - SE V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#6xkk">6<EM>xkk</EM></A> - LD V<EM>x</EM>, <EM>byte</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#7xkk">7<EM>xkk</EM></A> - ADD V<EM>x</EM>, <EM>byte</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy0">8<EM>xy</EM>0</A> - LD V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy1">8<EM>xy</EM>1</A> - OR V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy2">8<EM>xy</EM>2</A> - AND V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy3">8<EM>xy</EM>3</A> - XOR V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy4">8<EM>xy</EM>4</A> - ADD V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy5">8<EM>xy</EM>5</A> - SUB V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy6">8<EM>xy</EM>6</A> - SHR V<EM>x</EM> {, V<EM>y</EM>}<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xy7">8<EM>xy</EM>7</A> - SUBN V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#8xyE">8<EM>xy</EM>E</A> - SHL V<EM>x</EM> {, V<EM>y</EM>}<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#9xy0">9<EM>xy</EM>0</A> - SNE V<EM>x</EM>, V<EM>y</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Annn">A<EM>nnn</EM></A> - LD I, <EM>addr</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Bnnn">B<EM>nnn</EM></A> - JP V0, <EM>addr</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Cxkk">C<EM>xkk</EM></A> - RND V<EM>x</EM>, <EM>byte</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Dxyn">D<EM>xyn</EM></A> - DRW V<EM>x</EM>, V<EM>y</EM>, <EM>nibble</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Ex9E">E<EM>x</EM>9E</A> - SKP V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#ExA1">E<EM>x</EM>A1</A> - SKNP V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx07">F<EM>x</EM>07</A> - LD V<EM>x</EM>, DT<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx0A">F<EM>x</EM>0A</A> - LD V<EM>x</EM>, K<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx15">F<EM>x</EM>15</A> - LD DT, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx18">F<EM>x</EM>18</A> - LD ST, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx1E">F<EM>x</EM>1E</A> - ADD I, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx29">F<EM>x</EM>29</A> - LD F, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx33">F<EM>x</EM>33</A> - LD B, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx55">F<EM>x</EM>55</A> - LD [I], V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx65">F<EM>x</EM>65</A> - LD V<EM>x</EM>, [I]<BR>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#3.2">3.2</A> - Super Chip-48 Instructions<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00Cn">00C<EM>n</EM></A> - SCD <EM>nibble</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00FB">00FB</A> - SCR<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00FC">00FC</A> - SCL<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00FD">00FD</A> - EXIT<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00FE">00FE</A> - LOW<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#00FF">00FF</A> - HIGH<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Dxy0">D<EM>xy</EM>0</A> - DRW V<EM>x</EM>, V<EM>y</EM>, 0<BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx30">F<EM>x</EM>30</A> - LD HF, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx75">F<EM>x</EM>75</A> - LD R, V<EM>x</EM><BR>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#Fx85">F<EM>x</EM>85</A> - LD V<EM>x</EM>, R<BR>
+
+		<BR>
+		<STRONG><A HREF="#4.0">4.0</A> - Interpreters</STRONG><BR>
+
+		<BR>
+		<STRONG><A HREF="#5.0">5.0</A> - Credits</STRONG><BR>
+
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="0.1">0.1</A> - Using This Document&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		While creating this document, I took every effort to try to make it easy to read, as
+		well as easy to find what you're looking for.<BR>
+		<BR>
+		In most cases, where a hexadecimal value is given, it is followed by the equivalent
+		decimal value in parenthesis. For example, "0x200 (512)."<BR>
+		<BR>
+		In most cases, when a word or letter is italicized, it is referring to a variable
+		value, for example, if I write "V<EM>x</EM>," the <EM>x</EM> reffers to a 4-bit
+		value.<BR>
+		<BR>		
+		The most important thing to remember as you read this document is that every <A HREF="#0.0">[TOC]</A>
+		link will take you back to the Table Of Contents. Also, links that you have not yet visited
+		will appear in <FONT COLOR="#0000FF">blue</FONT>, while links you have used will be
+		<FONT COLOR="#7F7F7F">gray</FONT>.<BR>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="1.0">1.0</A> - About Chip-8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		Whenever I mention to someone that I'm writing a Chip-8 interpreter, the response
+		is always the same: "What's a Chip-8?"<BR>
+		<BR>
+		Chip-8 is a simple, interpreted, programming language which was first used on some
+		do-it-yourself computer systems in the late 1970s and early 1980s. The COSMAC VIP,
+		DREAM 6800, and ETI 660 computers are a few examples. These computers typically
+		were designed to use a television as a display, had between 1 and 4K of RAM, and
+		used a 16-key hexadecimal keypad for input. The interpreter took up only
+		512 bytes of memory, and programs, which were entered into the computer in
+		hexadecimal, were even smaller.<BR>
+		<BR>
+		In the early 1990s, the Chip-8 language was revived by a man named Andreas
+		Gustafsson. He created a Chip-8 interpreter for the HP48 graphing calculator, 
+		called Chip-48. The HP48 was lacking a way to easily make fast games at the time,
+		and Chip-8 was the answer. Chip-48 later begat Super Chip-48, a modification of
+		Chip-48 which allowed higher resolution graphics, as well as other graphical
+		enhancements.<BR>
+		<BR>
+		Chip-48 inspired a whole new crop of Chip-8 interpreters for various platforms,
+		including MS-DOS, Windows 3.1, Amiga, HP48, MSX, Adam, and ColecoVision. I became
+		involved with Chip-8 after stumbling upon Paul Robson's interpreter on the 
+		World Wide Web. Shortly after that, I began writing my own Chip-8 interpreter.<BR>
+		<BR>
+		This document is a compilation of all the different sources of information I used
+		while programming my interpreter.<BR>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="2.0">2.0</A> - Chip-8 Specifications&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		This section describes the Chip-8 memory, registers, display, keyboard, and timers.<BR>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="2.1">2.1</A> - Memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		The Chip-8 language is capable of accessing up to 4KB (4,096 bytes) of RAM, from 
+		location 0x000 (0) to 0xFFF (4095). The first 512 bytes, from 0x000 to 0x1FF, are
+		where the original interpreter was located, and should not be used by programs.<BR>
+		<BR>
+		Most Chip-8 programs start at location 0x200 (512), but some begin at 0x600 (1536).
+		Programs beginning at 0x600 are intended for the ETI 660 computer.<BR>
+		<BR>
+		<A NAME="memmap"><STRONG>Memory</A> Map:</STRONG><BR>
+		+---------------+= 0xFFF (4095) End of Chip-8 RAM<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;0x200 to 0xFFF|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chip-8&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;Program / Data|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Space&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		+-&nbsp;-&nbsp;-&nbsp;-&nbsp;-&nbsp;-&nbsp;-&nbsp;-+= 0x600 (1536) Start of ETI 660 Chip-8 programs<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<BR>
+		+---------------+= 0x200 (512) Start of most Chip-8 programs<BR>
+		|&nbsp;0x000 to 0x1FF|<BR>
+		|&nbsp;Reserved for&nbsp;&nbsp;|<BR>
+		|&nbsp;&nbsp;interpreter&nbsp;&nbsp;|<BR>
+		+---------------+= 0x000 (0) Start of Chip-8 RAM<BR>
+
+
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="2.2">2.2</A> - Registers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		Chip-8 has 16 general purpose 8-bit registers, usually referred to as
+		V<EM>x</EM>, where <EM>x</EM> is a hexadecimal digit (0 through F). There is also
+		a 16-bit register called I. This register is generally used to store 
+		memory addresses, so only the lowest (rightmost) 12 bits are usually used.<BR>
+		<BR>
+		The VF register should not be used by any program, as it is used as a flag by
+		some instructions. See section 3.0, <A HREF="#3.0">Instructions</A>
+		for details.<BR>		
+		<BR>
+		Chip-8 also has two special purpose 8-bit registers, for the delay and sound timers.
+		When these registers are non-zero, they are automatically decremented at a rate 
+		of 60Hz. See the section 2.5, <A HREF="#2.5">Timers & Sound</A>, for more
+		information on these.<BR>
+		<BR>
+		There are also some "pseudo-registers" which are not accessable from Chip-8
+		programs. The program counter (PC) should be 16-bit, and is used to store the
+		currently executing address. The stack pointer (SP) can be 8-bit, it is used to
+		point to the topmost level of the stack.<BR>
+		<BR>
+		The stack is an array of 16 16-bit values, used to store the address that
+		the interpreter shoud return to when finished with a subroutine. Chip-8 allows
+		for up to 16 levels of nested subroutines.<BR>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="2.3">2.3</A> - Keyboard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		<A NAME="keyboard">The</A> computers which originally used the Chip-8 Language had a 16-key hexadecimal
+		keypad with the following layout:<BR>
+		<BR>
+		<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0 ALIGN=center>
+			<TR><TD><TT>1</TT></TD><TD><TT>2</TT></TD><TD><TT>3</TT></TD><TD><TT>C</TT></TD></TR>
+			<TR><TD><TT>4</TT></TD><TD><TT>5</TT></TD><TD><TT>6</TT></TD><TD><TT>D</TT></TD></TR>
+			<TR><TD><TT>7</TT></TD><TD><TT>8</TT></TD><TD><TT>9</TT></TD><TD><TT>E</TT></TD></TR>
+			<TR><TD><TT>A</TT></TD><TD><TT>0</TT></TD><TD><TT>B</TT></TD><TD><TT>F</TT></TD></TR>
+		</TABLE>
+		<BR>
+		This layout must be mapped into various other configurations to fit the keyboards
+		of today's platforms.<BR>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="2.4">2.4</A> - Display&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		<A NAME="dispcoords">The</A> original implementation of the Chip-8 language used a 64x32-pixel monochrome display
+		with this format:<BR>
+		<BR>
+		<TABLE BORDER=1 WIDTH=128 HEIGHT=64 CELLPADDING=0 CELLSPACING=0 ALIGN=center>
+			<TR><TD>
+				<TABLE BORDER=0 HEIGHT=60 WIDTH=100%> 
+					<TR><TD VALIGN=top ALIGN=left>(0,0)</TD><TD VALIGN=top ALIGN=right>(63,0)</TD></TR>
+					<TR><TD VALIGN=bottom ALIGN=left>(0,31)</TD><TD VALIGN=bottom ALIGN=right>(63,31)</TD></TR>
+				</TABLE>
+			</TD></TR>
+		</TABLE>
+		<BR>
+		Some other interpreters, most notably the one on the ETI 660, also had 64x48 and 
+		64x64 modes. To my knowledge, no current interpreter supports these modes. More 
+		recently, Super Chip-48, an interpreter for the HP48 calculator, added a 
+		128x64-pixel mode. This mode is now supported by most of the interpreters on other
+		platforms.<BR>
+		<BR>
+		Chip-8 draws graphics on screen through the use of sprites. A sprite is a group
+		of bytes which are a binary representation of the desired picture. Chip-8 sprites
+		may be up to 15 bytes, for a possible sprite size of 8x15.<BR>
+		<BR>
+		Programs may also refer to a group of sprites representing the hexadecimal 
+		digits 0 through F. These sprites are 5 bytes long, or 8x5 pixels. The data
+		should be stored in the interpreter area of Chip-8 memory (0x000 to 0x1FF). 
+		Below is a listing of each character's bytes, in binary and hexadecimal:<BR>
+		<BR>
+		<A NAME="font">&nbsp;</A>
+		<TABLE ALIGN=center>
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"0"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10010000<BR>
+								10010000<BR>
+								10010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x90<BR>
+								0x90<BR>
+								0x90<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"1"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								&nbsp;&nbsp;*&nbsp;<BR>
+								&nbsp;**&nbsp;<BR>
+								&nbsp;&nbsp;*&nbsp;<BR>
+								&nbsp;&nbsp;*&nbsp;<BR>
+								&nbsp;***<BR>
+							</TT></TD>
+							<TD><TT>
+								00100000<BR>
+								01100000<BR>
+								00100000<BR>
+								00100000<BR>
+								01110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0x20<BR>
+								0x60<BR>
+								0x20<BR>
+								0x20<BR>
+								0x70<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"2"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								00010000<BR>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x10<BR>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"3"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								00010000<BR>
+								11110000<BR>
+								00010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x10<BR>
+								0xF0<BR>
+								0x10<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"4"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+							</TT></TD>
+							<TD><TT>
+								10010000<BR>
+								10010000<BR>
+								11110000<BR>
+								00010000<BR>
+								00010000<BR>
+							</TT></TD>
+							<TD><TT>
+								0x90<BR>
+								0x90<BR>
+								0xF0<BR>
+								0x10<BR>
+								0x10<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"5"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+								00010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+								0x10<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"6"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+								10010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+								0x90<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"7"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								&nbsp;&nbsp;*&nbsp;<BR>
+								&nbsp;*&nbsp;&nbsp;<BR>
+								&nbsp;*&nbsp;&nbsp;<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								00010000<BR>
+								00100000<BR>
+								01000000<BR>
+								01000000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x10<BR>
+								0x20<BR>
+								0x40<BR>
+								0x40<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"8"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10010000<BR>
+								11110000<BR>
+								10010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x90<BR>
+								0xF0<BR>
+								0x90<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"9"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+								&nbsp;&nbsp;&nbsp;*<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10010000<BR>
+								11110000<BR>
+								00010000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x90<BR>
+								0xF0<BR>
+								0x10<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"A"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								****<BR>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10010000<BR>
+								11110000<BR>
+								10010000<BR>
+								10010000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x90<BR>
+								0xF0<BR>
+								0x90<BR>
+								0x90<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"B"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								***&nbsp;<BR>
+								*&nbsp;&nbsp;*<BR>
+								***&nbsp;<BR>
+								*&nbsp;&nbsp;*<BR>
+								***&nbsp;<BR>
+							</TT></TD>
+							<TD><TT>
+								11100000<BR>
+								10010000<BR>
+								11100000<BR>
+								10010000<BR>
+								11100000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xE0<BR>
+								0x90<BR>
+								0xE0<BR>
+								0x90<BR>
+								0xE0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"C"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10000000<BR>
+								10000000<BR>
+								10000000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x80<BR>
+								0x80<BR>
+								0x80<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"D"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								***&nbsp;<BR>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+								*&nbsp;&nbsp;*<BR>
+								***&nbsp;<BR>
+							</TT></TD>
+							<TD><TT>
+								11100000<BR>
+								10010000<BR>
+								10010000<BR>
+								10010000<BR>
+								11100000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xE0<BR>
+								0x90<BR>
+								0x90<BR>
+								0x90<BR>
+								0xE0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+			<TR>
+				<TD>
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"E"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>
+				</TD>
+				<TD>		
+					<TABLE BORDER=1 CELLPADDING=3 CELLSPACING=0>
+						<TR><TD>"F"</TD><TD>Binary</TD><TD>Hex</TD></TR>			
+						<TR>
+							<TD><TT>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								****<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+								*&nbsp;&nbsp;&nbsp;<BR>
+							</TT></TD>
+							<TD><TT>
+								11110000<BR>
+								10000000<BR>
+								11110000<BR>
+								10000000<BR>
+								10000000<BR>
+							</TT></TD>
+							<TD><TT>
+								0xF0<BR>
+								0x80<BR>
+								0xF0<BR>
+								0x80<BR>
+								0x80<BR>
+							</TT></TD>
+						</TR>
+					</TABLE>		
+				</TD>
+			</TR>
+
+		</TABLE>
+		</FONT></TT>
+		<BR>
+		<BR>
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="2.5">2.5</A> - Timers & Sound&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		Chip-8 provides 2 timers, a delay timer and a sound timer.<BR>
+		<BR>
+		The delay timer is active whenever the delay timer register (DT) is non-zero.
+		This timer does nothing more than subtract 1 from the value of DT at a rate
+		of 60Hz. When DT reaches 0, it deactivates.<BR>
+		<BR>
+		The sound timer is active whenever the sound timer register (ST) is non-zero.
+		This timer also decrements at a rate of 60Hz, however, as long as ST's value is
+		greater than zero, the Chip-8 buzzer will sound. When ST reaches zero, the sound
+		timer deactivates.<BR>
+		<BR>
+		The sound produced by the Chip-8 interpreter has only one tone. The frequency
+		of this tone is decided by the author of the interpreter.<BR> 
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="3.0">3.0</A> - Chip-8 Instructions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		The original implementation of the Chip-8 language includes 36 different
+		instructions, including math, graphics, and flow control functions.<BR>
+		<BR>
+		Super Chip-48 added an additional	 10 instructions, for a total of 46.<BR>
+		<BR>
+		All instructions are 2 bytes long and are stored most-significant-byte first.
+		In memory, the first byte of each instruction should be located at an even
+		addresses. If a program includes sprite data, it should be padded so any
+		instructions following it will be properly situated in RAM.<BR>
+		<BR>
+		This document does not yet contain descriptions of the Super Chip-48 instructions.
+		They are, however, listed below.<BR>
+		<BR>
+		In these listings, the following variables are used:<BR>
+		<BR>
+		<EM>nnn</EM> or <EM>addr</EM> - A 12-bit value, the lowest 12 bits of the instruction<BR>
+		<EM>n</EM> or <EM>nibble</EM> - A 4-bit value, the lowest 4 bits of the instruction<BR>
+		<EM>x</EM> - A 4-bit value, the lower 4 bits of the high byte of the instruction<BR>
+		<EM>y</EM> - A 4-bit value, the upper 4 bits of the low byte of the instruction<BR>
+		<EM>kk</EM> or <EM>byte</EM> - An 8-bit value, the lowest 8 bits of the instruction<BR>
+		</TT></FONT>
+		<BR>
+		<BR>
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="3.1">3.1</A> - Standard Chip-8 Instructions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>		
+		<STRONG><A NAME="0nnn">0<EM>nnn</EM></A> - SYS <EM>addr</EM></STRONG><BR>
+		Jump to a machine code routine at <EM>nnn</EM>.<BR>
+		<BR>
+		This instruction is only used on the old computers on which Chip-8 was originally implemented. It is ignored by modern interpreters.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="00E0">00E0</A> - CLS</STRONG><BR>
+		Clear the display.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="00EE">00EE</A> - RET</STRONG><BR>
+		Return from a subroutine.<BR>
+		<BR>
+		The interpreter sets the program counter to the address at the top of the
+		stack, then subtracts 1 from the stack pointer.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="1nnn">1<EM>nnn</EM></A> - JP <EM><EM>addr</EM></EM></STRONG><BR>
+		Jump to location <EM>nnn</EM>.<BR>
+		<BR>
+		The interpreter sets the program counter to <EM>nnn</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="2nnn">2<EM>nnn</EM></A> - CALL <EM>addr</EM></STRONG><BR>
+		Call subroutine at <EM>nnn</EM>.<BR>
+		<BR>
+		The interpreter increments the stack pointer, then puts the current PC on
+		the top of the stack. The PC is then set to <EM>nnn</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="3xkk">3<EM>xkk</EM></A> - SE V<EM>x</EM>, <EM>byte</EM></STRONG><BR>
+		Skip next instruction if V<EM>x</EM> = <EM>kk</EM>.<BR>
+		<BR>
+		The interpreter compares register V<EM>x</EM> to <EM>kk</EM>, and if they are 
+		equal, increments the program counter by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="4xkk">4<EM>xkk</EM></A> - SNE V<EM>x</EM>, <EM>byte</EM></STRONG><BR>
+		Skip next instruction if V<EM>x</EM> != <EM>kk</EM>.<BR>
+		<BR>
+		The interpreter compares register V<EM>x</EM> to <EM>kk</EM>, and if they are
+		not equal, increments the program counter by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="5xy0">5<EM>xy</EM>0</A> - SE V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Skip next instruction if V<EM>x</EM> = V<EM>y</EM>.<BR>
+		<BR>
+		The interpreter compares register V<EM>x</EM> to register V<EM>y</EM>, and if 
+		they are equal, increments the program counter by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="6xkk">6<EM>xkk</EM></A> - LD V<EM>x</EM>, <EM>byte</EM></STRONG><BR>
+		Set V<EM>x</EM> = <EM>kk</EM>.<BR>
+		<BR>
+		The interpreter puts the value <EM>kk</EM> into register V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="7xkk">7<EM>xkk</EM></A> - ADD V<EM>x</EM>, <EM>byte</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> + <EM>kk</EM>.<BR>
+		<BR>
+		Adds the value <EM>kk</EM> to the value of register V<EM>x</EM>, then stores the result in V<EM>x</EM>.
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy0">8<EM>xy</EM>0</A> - LD V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>y</EM>.<BR>
+		<BR>
+		Stores the value of register V<EM>y</EM> in register V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy1">8<EM>xy</EM>1</A> - OR V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set Vx = V<EM>x</EM> OR V<EM>y</EM>.<BR>
+		<BR>
+		Performs a bitwise OR on the values of V<EM>x</EM> and V<EM>y</EM>, then stores the result in V<EM>x</EM>. A
+		bitwise OR compares the corrseponding bits from two values, and if either bit
+		is 1, then the same bit in the result is also 1. Otherwise, it is 0. <BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy2">8<EM>xy</EM>2</A> - AND V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> AND V<EM>y</EM>.<BR>
+		<BR>
+		Performs a bitwise AND on the values of V<EM>x</EM> and V<EM>y</EM>, then stores the result in V<EM>x</EM>. A
+		bitwise AND compares the corrseponding bits from two values, and if both bits
+		are 1, then the same bit in the result is also 1. Otherwise, it is 0. <BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy3">8<EM>xy</EM>3</A> - XOR V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> XOR V<EM>y</EM>.<BR>
+		<BR>
+		Performs a bitwise exclusive OR on the values of V<EM>x</EM> and V<EM>y</EM>, then stores the
+		result in V<EM>x</EM>. An exclusive OR compares the corrseponding bits from two values,
+		and if the bits are not both the same, then the corresponding bit in the result
+		is set to 1. Otherwise, it is 0. <BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy4">8<EM>xy</EM>4</A> - ADD V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> + V<EM></EM>y, set VF = carry.<BR>
+		<BR>
+		The values of V<EM>x</EM> and V<EM>y</EM> are added together. If the result is greater than 8 bits
+		(i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result
+		are kept, and stored in V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy5">8<EM>xy</EM>5</A> - SUB V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> - V<EM>y</EM>, set VF = NOT borrow.<BR>
+		<BR>
+		If V<EM>x</EM> > V<EM>y</EM>, then VF is set to 1, otherwise 0. Then V<EM>y</EM> is subtracted from V<EM>x</EM>,
+		and the results stored in V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy6">8<EM>xy</EM>6</A> - SHR V<EM>x</EM> {, V<EM>y</EM>}</STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> SHR 1.<BR>
+		<BR>
+		If the least-significant bit of V<EM>x</EM> is 1, then VF is set to 1, otherwise 0. Then
+		V<EM>x</EM> is divided by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xy7">8<EM>xy</EM>7</A> - SUBN V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Set V<EM>x</EM> = V<EM>y</EM> - V<EM>x</EM>, set VF = NOT borrow.<BR>
+		<BR>
+		If V<EM>y</EM> > V<EM>x</EM>, then VF is set to 1, otherwise 0. Then V<EM>x</EM> is subtracted from V<EM>y</EM>,
+		and the results stored in V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="8xyE">8<EM>xy</EM>E</A> - SHL V<EM>x</EM> {, V<EM>y</EM>}</STRONG><BR>
+		Set V<EM>x</EM> = V<EM>x</EM> SHL 1.<BR>
+		<BR>
+		If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then
+		V<EM>x</EM> is multiplied by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="9xy0">9<EM>xy</EM>0</A> - SNE V<EM>x</EM>, V<EM>y</EM></STRONG><BR>
+		Skip next instruction if V<EM>x</EM> != V<EM>y</EM>.<BR>
+		<BR>
+		The values of V<EM>x</EM> and V<EM>y</EM> are compared, and if they are not equal, the program
+		counter is increased by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Annn">A<EM>nnn</EM></A> - LD I, <EM>addr</EM></STRONG><BR>
+		Set I = <EM>nnn</EM>.<BR>
+		<BR>
+		The value of register I is set to <EM>nnn</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Bnnn">B<EM>nnn</EM></A> - JP V0, <EM>addr</EM></STRONG><BR>
+		Jump to location <EM>nnn</EM> + V0.<BR>
+		<BR>
+		The program counter is set to <EM>nnn</EM> plus the value of V0.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Cxkk">C<EM>xkk</EM></A> - RND V<EM>x</EM>, <EM>byte</EM></STRONG><BR>
+		Set V<EM>x</EM> = random <EM>byte</EM> AND <EM>kk</EM>.<BR>
+		<BR>
+		The interpreter generates a random number from 0 to 255, which is then ANDed
+		with the value kk. The results are stored in V<EM>x</EM>. See instruction <A HREF="#8xy2">8<EM>xy</EM>2</A>
+		for more information on AND.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Dxyn">D<EM>xyn</EM></A> - DRW V<EM>x</EM>, V<EM>y</EM>, <EM>nibble</EM></STRONG><BR>
+		Display <EM>n</EM>-byte sprite starting at memory location I at (V<EM>x</EM>, V<EM>y</EM>), set VF = collision.<BR>
+		<BR>
+		The interpreter reads <EM>n</EM> bytes from memory, starting at the address stored in
+		I. These bytes are then displayed as sprites on screen at coordinates (V<EM>x</EM>, V<EM>y</EM>).
+		Sprites are XORed onto the existing screen. If this causes any pixels to be
+		erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned
+		so part of it is outside the coordinates of the display, it wraps around to
+		the opposite side of the screen. See instruction <A HREF="#8xy3">8<EM>xy</EM>3</A> for
+		more information on XOR, and section 2.4, <A HREF="2.4">Display</A>, for
+		more information on the Chip-8 screen and sprites.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Ex9E">E<EM>x</EM>9E</A> - SKP V<EM>x</EM></STRONG><BR>
+		Skip next instruction if key with the value of V<EM>x</EM> is pressed.<BR>
+		<BR>
+		Checks the keyboard, and if the key corresponding to the value of V<EM>x</EM> is currently
+		in the down position, PC is increased by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="ExA1">E<EM>x</EM>A1</A> - SKNP V<EM>x</EM></STRONG><BR>
+		Skip next instruction if key with the value of V<EM>x</EM> is not pressed.<BR>
+		<BR>
+		Checks the keyboard, and if the key corresponding to the value of V<EM>x</EM> is currently
+		in the up position, PC is increased by 2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx07">F<EM>x</EM>07</A> - LD V<EM>x</EM>, DT</STRONG><BR>
+		Set V<EM>x</EM> = delay timer value.<BR>
+		<BR>
+		The value of DT is placed into V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx0A">F<EM>x</EM>0A</A> - LD V<EM>x</EM>, K</STRONG><BR>
+		Wait for a key press, store the value of the key in V<EM>x</EM>.<BR>
+		<BR>
+		All execution stops until a key is pressed, then the value of that key
+		is stored in V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx15">F<EM>x</EM>15</A> - LD DT, V<EM>x</EM></STRONG><BR>
+		Set delay timer = V<EM>x</EM>.<BR>
+		<BR>
+		DT is set equal to the value of V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx18">F<EM>x</EM>18</A> - LD ST, V<EM>x</EM></STRONG><BR>
+		Set sound timer = V<EM>x</EM>.<BR>
+		<BR>
+		ST is set equal to the value of V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx1E">F<EM>x</EM>1E</A> - ADD I, V<EM>x</EM></STRONG><BR>
+		Set I = I + V<EM>x</EM>.<BR>
+		<BR>
+		The values of I and V<EM>x</EM> are added, and the results are stored in I.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx29">F<EM>x</EM>29</A> - LD F, V<EM>x</EM></STRONG><BR>
+		Set I = location of sprite for digit V<EM>x</EM>.<BR>
+		<BR>
+		The value of I is set to the location for the hexadecimal sprite corresponding to
+		the value of V<EM>x</EM>. See section 2.4, <A HREF="#2.4">Display</A>, for more information
+		on the Chip-8 hexadecimal font.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx33">F<EM>x</EM>33</A> - LD B, V<EM>x</EM></STRONG><BR>
+		Store BCD representation of V<EM>x</EM> in memory locations I, I+1, and I+2.<BR>
+		<BR>
+		The interpreter takes the decimal value of V<EM>x</EM>, and places the hundreds
+		digit in memory at location in I, the tens digit at location I+1, and the
+		ones digit at location I+2.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx55">F<EM>x</EM>55</A> - LD [I], V<EM>x</EM></STRONG><BR>
+		Store registers V0 through V<EM>x</EM> in memory starting at location I.<BR>
+		<BR>
+		The interpreter copies the values of registers V0 through V<EM>x</EM> into memory,
+		starting at the address in I.<BR>
+		<BR>
+		<BR>
+
+		<STRONG><A NAME="Fx65">F<EM>x</EM>65</A> - LD V<EM>x</EM>, [I]</EM></STRONG><BR>
+		Read registers V0 through V<EM>x</EM> from memory starting at location I.<BR>
+		<BR>
+		The interpreter reads values from memory starting at location I into registers
+		V0 through V<EM>x</EM>.<BR>
+		<BR>
+		<BR>
+
+		</FONT></TT>
+		<FONT SIZE=3><STRONG><EM><U>
+		<A NAME="3.2">3.2</A> - Super Chip-48 Instructions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>	
+		<STRONG><A NAME="00Cn">00C<EM>n</EM></A> - SCD <EM>nibble</EM></STRONG><BR>
+		<STRONG><A NAME="00FB">00FB</A> - SCR</EM></STRONG><BR>
+		<STRONG><A NAME="00FC">00FC</A> - SCL</STRONG><BR>
+		<STRONG><A NAME="00FD">00FD</A> - EXIT</STRONG><BR>
+		<STRONG><A NAME="00FE">00FE</A> - LOW</STRONG><BR>
+		<STRONG><A NAME="00FF">00FF</A> - HIGH</STRONG><BR>
+		<STRONG><A NAME="Dxy0">D<EM>xy</EM>0</A> - DRW V<EM>x</EM>, V<STRONG>y</STRONG>, 0</STRONG><BR>
+		<STRONG><A NAME="Fx30">F<EM>x</EM>30</A> - LD HF, V<EM>x</EM></STRONG><BR>
+		<STRONG><A NAME="Fx75">F<EM>x</EM>75</A> - LD R, V<EM>x</EM></STRONG><BR>
+		<STRONG><A NAME="Fx85">F<EM>x</EM>85</A> - LD V<EM>x</EM>, R</STRONG><BR>
+		<BR>
+		<BR>
+		<BR>
+
+		</FONT></TT>
+							<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="4.0">4.0</A> - Interpreters&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		Below is a list of every Chip-8 interpreter I could find on the World Wide Web:<BR>
+		<BR>
+		<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=3 ALIGN=center>
+			<TR>
+				<TD><STRONG>Title</STRONG></TD>
+				<TD><STRONG>Version</STRONG></TD>
+				<TD><STRONG>Author</STRONG></TD>
+				<TD><STRONG>Platform(s)</STRONG></TD>
+			</TR>
+			<TR>
+				<TD>Chip-48</TD>
+				<TD>2.20</TD>
+				<TD>Anrdreas Gustafsson</TD>
+				<TD>HP48</TD>
+			</TR>
+			<TR>
+				<TD>Chip8</TD>
+				<TD>1.1</TD>
+				<TD>Paul Robson</TD>
+				<TD>DOS</TD>
+			</TR>
+			<TR>
+				<TD>Chip-8 Emulator</TD>
+				<TD>2.0.0</TD>
+				<TD>David Winter</TD>
+				<TD>DOS</TD>
+			</TR>
+			<TR>
+				<TD>CowChip</TD>
+				<TD>0.1</TD>
+				<TD>Thomas P. Greene</TD>
+				<TD>Windows 3.1</TD>
+			</TR>
+			<TR>
+				<TD>DREAM MON</TD>
+				<TD>1.1</TD>
+				<TD>Paul Hayter</TD>
+				<TD>Amiga</TD>
+			</TR>
+			<TR>
+				<TD>Super Chip-48</TD>
+				<TD>1.1</TD>
+				<TD>Based on Chip-48, modified by Erik Bryntse</TD>
+				<TD>HP48</TD>
+			</TR>
+			<TR>
+				<TD>Vision-8</TD>
+				<TD>1.0</TD>
+				<TD>Marcel de Kogel</TD>
+				<TD>DOS, Adam, MSX, ColecoVision</TD>
+			</TR>
+		</TABLE>
+		</FONT></TT>
+		<BR>
+		<BR>
+
+		<FONT SIZE=4><STRONG><EM><U>
+		<A NAME="5.0">5.0</A> - Credits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</U></EM></STRONG></FONT> <A HREF="#0.0">[TOC]</A><BR>
+		<BR>
+		<TT><FONT SIZE=3>
+		This document was compiled by <A HREF="mailto:cowgod@rockpile.com">Thomas P. Greene</A>.<BR>
+		<BR>
+		<STRONG>Sources include:</STRONG><BR>
+		<UL>
+			<LI>My own hacking.</LI>
+			<LI>E-mail between David Winter and myself.</LI>
+			<LI>David Winter's <U>Chip-8 Emulator</U> documentation.</LI>
+			<LI>Christian Egeberg's <U>Chipper</U> documentation.</LI>
+			<LI>Marcel de Kogel's <U>Vision-8</U> source code.</LI>
+			<LI>Paul Hayter's <U>DREAM MON</U> documentation.</LI>
+			<LI>Paul Robson's web page.</LI>
+			<LI>Andreas Gustafsson's <U>Chip-48</U> documentation.</LI>
+		</UL>
+		</FONT></TT>
+		<BR>
+		<BR>
+		<BR>
+		<FONT SIZE=2><TT>August 30, 1997 06:00:00</TT></FONT>
+	</BODY>
+</HTML>
