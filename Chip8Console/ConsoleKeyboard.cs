@@ -9,8 +9,6 @@ namespace Chip8Console
 	public class ConsoleKeyboard : IKeyboard
 	{
 		bool[] keyboardMap = new bool[16];
-		int count;
-
 		Stopwatch sw;
 
 		public ConsoleKeyboard()
@@ -18,11 +16,14 @@ namespace Chip8Console
 			sw = new Stopwatch();
 		}
 
-		public void CheckKeys(){
+		public bool CheckKeys(){
 			if (Console.KeyAvailable){
-				count = 0;
+
 				var keypressed = Console.ReadKey();
 				var keychar = keypressed.KeyChar;
+
+				if(keypressed.Key == ConsoleKey.Escape)
+					return true;
 
 				if(keypressed.KeyChar == 'q')
 					System.Environment.Exit(0);
@@ -45,6 +46,7 @@ namespace Chip8Console
 					}
 				}
 			}
+			return false;
 		}
 
 		public byte WaitForValue()

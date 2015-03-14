@@ -136,9 +136,9 @@ namespace Chip8EmulatorTests
 		[Test]
 		public void CanDetectCollisions(){
 			var sprite = new byte[1];
-			sprite[0] = 0xc; // 00001100
+			sprite[0] = 0x20; // 00100000 lsb = 00000100 msb
 			var display = new TestDisplay();
-			display.Screen[0] = 0x4; // 00000100
+			display.Screen[0] = 0x4; // 00100000 lsb
 			var memory = new Memory();
 			memory.LoadAt(sprite, 0x300);
 			var cpu = new CPU(memory, display, new Keyboard());

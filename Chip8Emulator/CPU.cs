@@ -116,7 +116,7 @@ namespace Chip8Emulator
 
         public bool ProcessInstruction(ushort instruction)
         {
-            var opcode = GetOpCode(instruction);
+			var opcode = ParserFunctions.GetOpCode(instruction);
             var func = InstructionSet[opcode];
             
             return func(instruction);
@@ -124,17 +124,14 @@ namespace Chip8Emulator
 
         private bool SYS(ushort instruction)
         {
-            if (GetAddress(instruction) == 0xee)
+			if (ParserFunctions.GetAddress(instruction) == 0xee)
             {
-				//Debug.WriteLine("RET");
                 return RET();
             }
-			if (GetAddress(instruction) == 0x00){
-				//Debug.WriteLine("QUIT");
+			if (ParserFunctions.GetAddress(instruction) == 0x00){
 				return true;
 			}
-			if (GetAddress(instruction) == 0xe0){
-				//Debug.WriteLine("CLS");
+			if (ParserFunctions.GetAddress(instruction) == 0xe0){
 				display.Screen.Initialize();
 			}
             return false;
@@ -142,28 +139,25 @@ namespace Chip8Emulator
 
         private bool LDI(ushort instruction)
         {
-            AddressRegister = GetAddress(instruction);
-			//Debug.WriteLine(string.Format("LD I, {0:x}", AddressRegister));
+			AddressRegister = ParserFunctions.GetAddress(instruction);
             return false;
         }
 
         private bool LD(ushort instruction)
         {
-            byte x = GetX(instruction);
-			var value = GetValue(instruction);
+			byte x = ParserFunctions.GetX(instruction);
+			var value = ParserFunctions.GetValue(instruction);
 			Register[x] = value;
-			//Debug.WriteLine(string.Format("LD {0}, {1:x}", x, AddressRegister));
 			return false;
         }
 
         private bool SEV(ushort instruction)
         {
-            byte x = GetX(instruction);
+			byte x = ParserFunctions.GetX(instruction);
             byte regValueX = Register[x];
 
-            byte y = GetY(instruction);
+			byte y = ParserFunctions.GetY(instruction);
             byte regValueY = Register[y];
-			//Debug.WriteLine(string.Format("SE V{0}, V{1}", x, y));    
             if (regValueX == regValueY)
                 InstructionPointer += 2;
 
@@ -172,10 +166,9 @@ namespace Chip8Emulator
 
         private bool SNE(ushort instruction)
         {
-            byte x = GetX(instruction);
+			byte x = ParserFunctions.GetX(instruction);
             byte regValue = Register[x];
-            byte opValue = GetValue(instruction);
-			//Debug.WriteLine(string.Format("SNE {0}, {1:x}", x, opValue));
+			byte opValue = ParserFunctions.GetValue(instruction);
             if (regValue != opValue)
                 InstructionPointer += 2;
 
@@ -184,10 +177,9 @@ namespace Chip8Emulator
 
         private bool SE(ushort instruction)
         {
-            byte x = GetX(instruction);
+			byte x = ParserFunctions.GetX(instruction);
             byte regValue = Register[x];
-            byte opValue = GetValue(instruction);
-			//Debug.WriteLine(string.Format("SE {0}, {1:x}", x, opValue));
+			byte opValue = ParserFunctions.GetValue(instruction);
 
             if (regValue == opValue)
                 InstructionPointer += 2;
@@ -197,8 +189,7 @@ namespace Chip8Emulator
         private bool CALL(ushort instruction)
         {
             Stack.Push(InstructionPointer);
-            InstructionPointer = GetAddress(instruction);
-			//Debug.WriteLine(string.Format("CALL {0}", InstructionPointer));
+			InstructionPointer = ParserFunctions.GetAddress(instruction);
 
 			return false;
         }
@@ -211,15 +202,13 @@ namespace Chip8Emulator
                 return true;
             }
 
-			//Debug.WriteLine(string.Format("RET To:{0}", Stack.Peek()));        
             InstructionPointer = Stack.Pop();
             return false;
         }
 
         private bool JP(ushort instruction)
         {
-			InstructionPointer = GetAddress(instruction);
-			//Debug.WriteLine(string.Format("JP {0:x}", InstructionPointer));
+			InstructionPointer = ParserFunctions.GetAddress(instruction);
 
 			return false;
 
@@ -227,9 +216,8 @@ namespace Chip8Emulator
 
         private bool ADD(ushort instruction)
         {
-            int register = GetX(instruction);
-            byte value = GetValue(instruction);
-			//Debug.WriteLine(string.Format("ADD {0}, {1:x}", register, value));
+			int register = ParserFunctions.GetX(instruction);
+			byte value = ParserFunctions.GetValue(instruction);
 
             Register[register] += value;
             return false;
@@ -237,11 +225,11 @@ namespace Chip8Emulator
 
         private bool REG(ushort instruction)
         {
-            byte subcommand = GetSubCommand(instruction);
+			byte subcommand = ParserFunctions.GetSubCommand(instruction);
             var command = RegisterCommands[subcommand];
 
-            var regX = GetX(instruction);
-            var regY = GetY(instruction);
+			var regX = ParserFunctions.GetX(instruction);
+			var regY = ParserFunctions.GetY(instruction);
 
             command(regX, regY);
             return false; 
@@ -249,9 +237,8 @@ namespace Chip8Emulator
 
         private bool SNEV(ushort instruction)
         {
-            var regX = GetX(instruction);
-            var regY = GetY(instruction);
-			//Debug.WriteLine(string.Format("SNEV {0}, {1}", regX, regY));
+			var regX = ParserFunctions.GetX(instruction);
+			var regY = ParserFunctions.GetY(instruction);
 
             var regValueX = Register[regX];
             var regValueY = Register[regY];
@@ -266,8 +253,7 @@ namespace Chip8Emulator
         private bool JPV(ushort instruction)
         {
 			byte offset = Register[0];
-            ushort address = GetAddress(instruction);
-			//Debug.WriteLine(string.Format("JP V0, {0:x}", address));
+			ushort address = ParserFunctions.GetAddress(instruction);
 
 			ushort ipaddress = (ushort)(offset + address);
 			InstructionPointer = ipaddress;
@@ -276,21 +262,19 @@ namespace Chip8Emulator
 
 		private bool RND(ushort instruction){
 			byte randomValue = RandomFunc();
-			var register = GetX(instruction);
-			var mask = GetValue(instruction);
-			//Debug.WriteLine(string.Format("RND V{0}, {1:x}", register, mask));
+			var register = ParserFunctions.GetX(instruction);
+			var mask = ParserFunctions.GetValue(instruction);
 			
 			Register[register] = (byte)(randomValue & mask);
 			return false;
 		}
 
 		private bool DRW(ushort instruction){
-			var Vx = GetX(instruction);
-			var Vy = GetY(instruction);
+			var Vx = ParserFunctions.GetX(instruction);
+			var Vy = ParserFunctions.GetY(instruction);
 			var x = Register[Vx];
 			var y = Register[Vy];
-			var count = GetSubCommand(instruction);
-			//Debug.WriteLine(string.Format("DRW V{0}, V{1}, {2}", Vx, Vy, count));
+			var count = ParserFunctions.GetSubCommand(instruction);
 			
 			byte[] sprite = new byte[count];
 			for (ushort i=0;i<count;i++){
@@ -305,21 +289,17 @@ namespace Chip8Emulator
 		}
 
 		private bool SKP(ushort instruction){
-			var value = GetValue(instruction);
-			var x = GetX(instruction);
+			var value = ParserFunctions.GetValue(instruction);
+			var x = ParserFunctions.GetX(instruction);
 			var key = Register[x];
 
 			switch (value) {
 				case 0x9e:
-					//Debug.WriteLine(string.Format("SKP V{0}", x));
-					//Debug.WriteLine(string.Format("Looking for Key {0}, got {1}", key, keyPressed));
 					if(keyboard.GetValue(key)) {
 						InstructionPointer += 2;
 					}
 					break;
 				case 0xa1:
-					//Debug.WriteLine(string.Format("SKNP V{0}", x));
-					//Debug.WriteLine(string.Format("Looking for Key {0}, got {1}", key, keyPressed));
 					if(!keyboard.GetValue(key)) {
 						InstructionPointer += 2;
 					break;
@@ -335,31 +315,25 @@ namespace Chip8Emulator
 		{
 
 
-			var register = GetX(instruction);
-			var subcommand = GetValue(instruction);
+			var register = ParserFunctions.GetX(instruction);
+			var subcommand = ParserFunctions.GetValue(instruction);
 			switch (subcommand) {
 			case 0x15:
-				//Debug.WriteLine(string.Format("LD DT,V{0}", register));
 				DelayTimer.Value = Register[register];
 				break;
 			case 0x07:
-				//Debug.WriteLine(string.Format("LD V{0}, DT", register));
 				Register[register] = DelayTimer.Value;
 				break;
 			case 0x18:
-				//Debug.WriteLine(string.Format("LD ST,V{0}", register));
 				SoundTimer.Value = Register[register];
 				break;
 			case 0x1e:
-				//Debug.WriteLine(string.Format("LD I,V{0}", register));
 				AddressRegister += Register[register];
 				break;
 			case 0x29:
-				//Debug.WriteLine(string.Format("LD F, V{0}", register));
 				AddressRegister = (ushort)(Register[register] * SPRITE_SIZE); 
 				break;
 			case 0x33:
-				//Debug.WriteLine(string.Format("LD BCD,V{0}", register));
 				byte value = Register[register];
 				byte hundreds = (byte)(value / 100);
 				byte tens = (byte)((value - (hundreds * 100)) / 10);
@@ -369,19 +343,16 @@ namespace Chip8Emulator
 				memory.SetValue((ushort)(AddressRegister + 2), ones);
 				break;
 			case 0x55:
-				//Debug.WriteLine(string.Format("LD [I],V{0}", register));
 				for (int i = 0; i <= register; i++) {
 					ushort address = (ushort)(AddressRegister + i);
 					memory.SetValue(address, Register[i]);
 				}
 				break;
 			case 0x0a: 
-				//Debug.WriteLine(string.Format("LD V{0}, K", register));
 				var key = keyboard.WaitForValue();
 				Register[register] = key;
 				break;
 			case 0x65:
-				//Debug.WriteLine(string.Format("LD V{0}, [I]", register));
 				for (int i = 0; i <= register; i++) {
 					ushort address = (ushort)(AddressRegister + i);
 					Register[i] = memory.GetValue(address);
@@ -394,36 +365,7 @@ namespace Chip8Emulator
 			return false;
 		}
 
-        private byte GetY(ushort instruction)
-        {
-            return (byte) (instruction >> 4 & 0x0f);
-        }
-
-        private byte GetX(ushort instruction)
-        {
-            return (byte) (instruction >> 8 & 0x0f);
-        }
-
-        private byte GetValue(ushort instruction)
-        {
-            return (byte) (instruction & 0xff);
-        }
-
-        private byte GetSubCommand(ushort instruction)
-        {
-            return (byte)(instruction & 0x0f);
-        }
-
-        private byte GetOpCode(ushort instruction)
-        {
-            return (byte) (instruction >> 12);
-        }
-
-        private ushort GetAddress(ushort instruction)
-        {
-            return (ushort) (instruction & 0x7ff);
-        }
-
+       
 
         private ushort GetNextInstruction()
         {
@@ -447,7 +389,6 @@ namespace Chip8Emulator
 
 			for (int spriteRow=0;spriteRow<len;spriteRow++){
 				var row = y + spriteRow;
-				//Debug.WriteLine(string.Format("Draw {0} at {1},{2}", Convert.ToString(sprite[spriteRow], 2), x, y));
 				// Wrap around from top
 				while(row > 31)
 					row -= 32;
@@ -460,8 +401,6 @@ namespace Chip8Emulator
 					collision = SetByteAndDetectCollision(row * 8 + bytePos, sprite[spriteRow]);
 				}
 			}
-			//if(collision > 0)
-				//Debug.WriteLine("Collision detected");
 			return collision;
 		}
 
@@ -474,4 +413,57 @@ namespace Chip8Emulator
 			return collision;
 		}
     }
+
+	public class ParserFunctions
+	{
+		public static byte GetY(ushort instruction)
+		{
+			return (byte) (instruction >> 4 & 0x0f);
+		}
+
+		public static byte GetX(ushort instruction)
+		{
+			return (byte) (instruction >> 8 & 0x0f);
+		}
+
+		public static byte GetValue(ushort instruction)
+		{
+			return (byte) (instruction & 0xff);
+		}
+
+		public static byte GetSubCommand(ushort instruction)
+		{
+			return (byte)(instruction & 0x0f);
+		}
+
+		public static byte GetOpCode(ushort instruction)
+		{
+			return (byte) (instruction >> 12);
+		}
+
+		public static ushort GetAddress(ushort instruction)
+		{
+			return (ushort) (instruction & 0x7ff);
+		}
+
+		public static ParseResult ParseInstruction(ushort instruction){
+			var parseResult = new ParseResult();
+			parseResult.OpCode = GetOpCode(instruction);
+			parseResult.Address = GetAddress(instruction);
+			parseResult.Value = GetValue(instruction);
+			parseResult.X = GetX(instruction);
+			parseResult.Y = GetY(instruction);
+			parseResult.SubCommand = GetSubCommand(instruction);
+			return parseResult;
+		}
+
+		public class ParseResult{
+			public int OpCode;
+			public int Address;
+			public int X;
+			public int Y;
+			public int Value;
+			public int SubCommand;
+		}
+	}
 }
