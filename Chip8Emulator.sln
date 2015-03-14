@@ -12,29 +12,49 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Console", "Chip8Console\Chip8Console.csproj", "{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Android", "Chip8Android\Chip8Android.csproj", "{4948EF28-5472-4A15-BF4F-B822928CACA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Mac", "Chip8Mac\Chip8Mac.csproj", "{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		AppStore|Any CPU = AppStore|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.AppStore|Any CPU.ActiveCfg = AppStore|Any CPU
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.AppStore|Any CPU.Build.0 = AppStore|Any CPU
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Chip8Console\Chip8Console.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

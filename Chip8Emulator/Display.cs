@@ -1,8 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Chip8Emulator
 {
-	public class Display
+
+	public interface IDisplay {
+		byte[] Screen { get;}
+		void Print();
+	}
+
+	public class Display : IDisplay
 	{
 
 		public Display()
@@ -12,30 +19,9 @@ namespace Chip8Emulator
 
 		public byte[] Screen {get;private set;}
 
-		public virtual void Print(){	
-			for (int y = 0; y < 32; y++) {
-				for (int x = 0; x < 8; x++) {
-					var word = Screen[y * 8 + x];
-					for (int i = 7;i>=0;i--){
-						string output = " ";
-						int flag = 0;
-						if(i == 0 && word == 1) {
-							output = "*";
-						}
+		public virtual void Print(){
 
-						else
-							flag = 1 << i;
 
-						if((flag & word) > 0)
-							output = "*";
-
-						Console.Write(output);
-					}
-
-				}
-				Console.WriteLine();
-			}
 		}
 	}
 }
-

@@ -1,27 +1,50 @@
-﻿<Properties GitUserInfo="UsingGIT">
+﻿<Properties GitUserInfo="UsingGIT" StartupItem="Chip8Console/Chip8Console.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Chip8Console/test.bin">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Chip8Console/ConsoleKeyboard.cs">
     <Files>
-      <File FileName="Chip8EmulatorTests/CPUTests.cs" Line="1" Column="1" />
-      <File FileName="Chip8EmulatorTests/MemoryTests.cs" Line="1" Column="1" />
-      <File FileName="Chip8EmulatorTests/packages.config" Line="1" Column="1" />
-      <File FileName="Chip8Emulator/Display.cs" Line="1" Column="1" />
-      <File FileName="Chip8Emulator/CPU.cs" Line="1" Column="1" />
-      <File FileName="Chip8Emulator/Memory.cs" Line="1" Column="1" />
-      <File FileName="Chip8Emulator/Keyboard.cs" Line="1" Column="1" />
-      <File FileName="Chip8Console/Program.cs" Line="1" Column="1" />
-      <File FileName="Chip8Console/ConsoleDisplay.cs" Line="1" Column="1" />
-      <File FileName="Chip8EmulatorTests/DisplayTests.cs" Line="1" Column="1" />
-      <File FileName="Chip8Console/ROM.bin" Line="1" Column="1" />
-      <File FileName="Chip8Console/test.bin" />
+      <File FileName="Chip8Android/MainActivity.cs" Line="1" Column="1" />
+      <File FileName="../../../../../Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Android/Xamarin.Android.Common.targets" Line="1" Column="1" />
+      <File FileName="Chip8Android/Chip8View.cs" Line="1" Column="1" />
+      <File FileName="Chip8Android/Screen.cs" Line="1" Column="1" />
+      <File FileName="Chip8Emulator/Keyboard.cs" Line="25" Column="25" />
+      <File FileName="Chip8Emulator/CPU.cs" Line="5" Column="5" />
+      <File FileName="Chip8Console/ConsoleKeyboard.cs" Line="26" Column="26" />
+      <File FileName="Chip8Console/Program.cs" Line="32" Column="32" />
+      <File FileName="Chip8Android/ImageAdapter.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Chip8Android" expanded="True">
+            <Node name="Assets" expanded="True" />
+          </Node>
+          <Node name="Chip8Console" expanded="True" selected="True" />
+          <Node name="Chip8Emulator" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True">
+          <Node name="Chip8EmulatorTests" expanded="True">
+            <Node name="Chip8EmulatorTests" expanded="True">
+              <Node name="CPUTests" expanded="True" />
+              <Node name="DisplayTests" expanded="True">
+                <Node name="CanWrapSpriteAtX" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/DisplayTests.cs" line="20" column="1" />
-      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8EmulatorTests/CPUTests.cs" line="313" column="1" />
-      <Breakpoint file="/Users/perfp/Documents/cs/Chip8/Chip8Console/Program.cs" line="27" column="1" />
+      <Breakpoint file="/Users/perfp/Projects/cs/Chip8/Chip8Emulator/Keyboard.cs" line="19" column="1" />
+      <Breakpoint file="/Users/perfp/Projects/cs/Chip8/Chip8Android/MainActivity.cs" line="115" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Chip8Android MonoForAntroid.PreferredDevice="Nexus 4" AndroidDesignerPreferredDevice="Nexus 7 (2012)" />
 </Properties>

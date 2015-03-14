@@ -2,16 +2,26 @@
 
 namespace Chip8Emulator
 {
-	public class Keyboard
+	public interface IKeyboard
 	{
-		byte value = 0;
+		byte WaitForValue();
+		bool GetValue(byte key);
+	}
+	public class Keyboard : IKeyboard
+	{
+		byte value = 0xff;
 
 		public void SetValue(byte value){
 			this.value = value;
 		}
 
-		public byte GetValue(){
-			return this.value;
+		public virtual byte WaitForValue(){
+			var previousValue = this.value;
+			this.value = 0xff;
+			return previousValue;
+		}
+		public virtual bool GetValue(byte key){
+			return this.value == key;
 		}
 	}
 }

@@ -15,12 +15,12 @@ namespace Chip8Emulator
            
        }
 
-       public void SetValue(int address, byte value)
+       public void SetValue(ushort address, byte value)
        {
            memoryBuffer[address] = value;
        }
 
-       public byte GetValue(int address)
+       public byte GetValue(ushort address)
        {
            return memoryBuffer[address];
        }
@@ -29,6 +29,14 @@ namespace Chip8Emulator
        {
           program.CopyTo(memoryBuffer, 0x200);
        }
+
+		public void LoadAt(byte[] program, int memoryIndex)
+		{
+			if(memoryIndex < 0 || memoryIndex >= memoryBuffer.Length)
+				throw new ArgumentException(string.Format("Index value {0} outside memory boundaries", memoryIndex), "memoryIndex");
+
+			program.CopyTo(memoryBuffer, memoryIndex);
+		}
 
 		public void InitializeROM(byte[] rom){
 			rom.CopyTo(memoryBuffer, 0x0);
