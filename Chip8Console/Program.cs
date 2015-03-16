@@ -1,4 +1,4 @@
-﻿using System;
+﻿	using System;
 using Chip8Emulator;
 using System.IO;
 using System.Diagnostics;

@@ -6,15 +6,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8EmulatorTests", "Chip8EmulatorTests\Chip8EmulatorTests.csproj", "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38CED35D-5B80-4AC9-B545-B25F01A09ECB}"
-	ProjectSection(SolutionItems) = preProject
-		Cowgod%27s Chip-8 Technical Reference.html = Cowgod%27s Chip-8 Technical Reference.html
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Console", "Chip8Console\Chip8Console.csproj", "{1FAF1D58-E11A-4CE3-8D31-031AFE91F771}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Android", "Chip8Android\Chip8Android.csproj", "{4948EF28-5472-4A15-BF4F-B822928CACA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Mac", "Chip8Mac\Chip8Mac.csproj", "{1B14E868-E1CE-4DDB-B9AC-74F22E78A6A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembler", "Assembler\Assembler.csproj", "{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +40,12 @@ Global
 		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4948EF28-5472-4A15-BF4F-B822928CACA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBCCF50-E27C-4F1D-BC55-FC5A01DD1AC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.AppStore|Any CPU.Build.0 = Debug|Any CPU
 		{DF2A87B5-29BD-4B14-BD2D-9162FE8CF417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
